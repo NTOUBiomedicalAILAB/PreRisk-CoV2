@@ -131,7 +131,7 @@ This repository provides to ensure your selected biomarkers are reliable and gen
 ---
 
 
-### 🔄 Step 2: Internal Validation (Required)
+### 🔄 Step 2: Internal Validation 
 
 **Purpose**: Evaluate the stability and reliability of selected features using the training dataset.
 
