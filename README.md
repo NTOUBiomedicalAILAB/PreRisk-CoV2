@@ -4,11 +4,46 @@ Pre-exposure risk assessment for SARS-CoV-2 using plasma protein  biomarkers. Ma
 **📄 Paper:** *Predicting SARS-CoV-2 Susceptibility from Pre-Infection Plasma Proteins: A Machine Learning Approach*
 
 
-##  Repository Scope
+## 📋 Repository Scope
 
-This repository contains feature selection methods :
-- ✅ Genetic Algorithm with Orthogonal Array Crossover (OAX)
-- ✅ Permutation-based exhaustive search
+This repository contains:
+
+✅ **Internal Validation** - Leave-One-Out Cross-Validation (LOOCV) on discovery cohort  
+✅ **External Validation** - Independent validation on external cohort  
+✅ **KNN Classifier** - K-Nearest Neighbors with optimized parameters  
+✅ **SMOTE Oversampling** - Class imbalance handling
+
+
+<br>
+
+
+### What's Included
+
+✅ **Internal Validation** (`Internal-validation.py`)
+   - Leave-One-Out Cross-Validation (LOOCV)
+   - 100 iterations for robust performance estimation
+   - Discovery cohort 
+
+✅ **External Validation** (`External-validation.py`)
+   - Independent external cohort testing
+   - 100 iterations for validation
+   - Validation cohort 
+
+✅ **Machine Learning Pipeline**
+   - K-Nearest Neighbors (KNN) classifier
+   - SMOTE oversampling for class imbalance
+   - 5-protein biomarker panel (pre-selected features)
+
+✅ **Performance Metrics**
+   - AUROC, AUPRC
+   - Accuracy, Sensitivity, Specificity
+   - MCC (Matthews Correlation Coefficient)
+   - F1-score, Precision
+
+✅ **Visualization**
+   - ROC curves
+   - Precision-Recall curves
+
 <br>
 
 ---
