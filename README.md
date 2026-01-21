@@ -116,11 +116,9 @@ This repository provides **feature selection methods**. To ensure your selected 
 ---
 
 
-### 📊 Step 1: Feature Selection (This Repository)
+### 📊 Step 1: Feature Selection 
 
-**Files Provided**: 
-- `permutation_selection.py`
-- `genetic_algorithm_selection.py`
+
 
 **Purpose**: Identify the optimal subset of protein biomarkers from 92 candidates.
 
