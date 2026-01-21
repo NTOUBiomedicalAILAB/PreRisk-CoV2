@@ -1,7 +1,7 @@
 # PreRisk-CoV2
 Pre-exposure risk assessment for SARS-CoV-2 using plasma protein  biomarkers. Machine learning framework (KNN+GA) with 5-protein panel.  Dual validation: LOOCV internal + independent external cohort.  Python implementation.
 
-**📄 Paper:** *Predicting SARS-CoV-2 Susceptibility from Pre-Infection Plasma Proteins: A Machine Learning Approach*
+**📄 Paper:** *Predicting SARS-CoV-2 Susceptibility from Pre-Infection Serum Proteins: A Machine Learning Approach*
 
 
 ## 📋 Repository Scope
