@@ -87,10 +87,11 @@ pip install -r requirements.txt
 Usage
 
 ```bash
-python "External validation.py"
-
-
+# Internal validation - LOOCV on discovery cohort with 100 iterations
 python "Internal validation.py"
+
+# External validation - Independent cohort testing with 100 iterations
+python "External validation.py"
 ```
 
 <br>
