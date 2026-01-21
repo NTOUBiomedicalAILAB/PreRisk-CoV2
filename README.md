@@ -83,8 +83,10 @@ cd PreRisk-CoV2
 
 # Install dependencies
 pip install -r requirements.txt
-
+```
 Usage
+
+```bash
 python "External validation.py"
 
 
