@@ -3,9 +3,6 @@ Pre-exposure risk assessment for SARS-CoV-2 using plasma protein  biomarkers. Ma
 
 **📄 Paper:** *Predicting SARS-CoV-2 Susceptibility from Pre-Infection Plasma Proteins: A Machine Learning Approach*
 
-# protein-biomarker-feature-selection
-🧬 Feature selection algorithms for discovering optimal protein biomarkers using GA with OAX and Permutation methods
-<br>
 
 ##  Repository Scope
 
@@ -59,18 +56,19 @@ python "External validation.py"
 python "Internal validation.py"
 ```
 
-Data Format
-Your input CSV file should contain:
+<br>
 
-| Column                 | Type   | Description                  | Example             |
-| ---------------------- | ------ | ---------------------------- | ------------------- |
-| sample ID              | string | Anonymized sample identifier | S001, S002, ...     |
-| PCR result             | string | Detection result             | "Detected" or "Not" |
-| Protein_1 ~ Protein_92 | float  | Protein concentration values | 0.123, 4.567, ...   |
+## 📊 Data Availability
 
-All data supporting this study are publicly available in the Gene Expression Omnibus (https://www.ncbi.nlm.nih.gov/geo) under accession numbers GSE198449 and GSE178967.
+### Public Datasets
 
-🔒 Data Privacy: The actual dataset is not provided due to patient privacy concerns.
+All data supporting this study are publicly available in the **Gene Expression Omnibus** (https://www.ncbi.nlm.nih.gov/geo) under accession numbers **GSE198449** and **GSE178967**.
+
+
+
+### Data Privacy
+
+🔒 **Note**: The actual patient-level dataset files are not included in this repository due to privacy regulations and ethical considerations. Researchers can access the data through GEO with appropriate institutional review.
 
 
 
