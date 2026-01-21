@@ -111,7 +111,7 @@ All data supporting this study are publicly available in the **Gene Expression O
 
 ## 🔬 Complete Validation Pipeline
 
-This repository provides **feature selection methods**. To ensure your selected biomarkers are reliable and generalizable, you must complete the following validation steps:
+This repository provides to ensure your selected biomarkers are reliable and generalizable, you must complete the following validation steps:
 
 ---
 
@@ -122,7 +122,7 @@ This repository provides **feature selection methods**. To ensure your selected 
 
 **Purpose**: Identify the optimal subset of protein biomarkers from 92 candidates.
 
-**Output**: A list of selected feature indices (e.g., [3, 50, 40, 36, 83])
+**Output**: A list of selected feature indices
 
 **Methods**:
 - **Genetic Algorithm with OAX**: Evolutionary search for large feature spaces
