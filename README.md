@@ -40,7 +40,7 @@ python External-validation.py
 
 #### 2. Subsequent Usage
 
-If the example runs without errors, you only need to activate your environment before using PreRisk-CoV2:
+If the runs without errors, you only need to activate your environment before using PreRisk-CoV2:
 
 ```bash
 conda activate prerisk
