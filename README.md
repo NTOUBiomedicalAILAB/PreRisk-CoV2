@@ -282,12 +282,4 @@ Set `pr_roc = 1` in script to generate:
 
 ---
 
-## Citation
 
-If you use PreRisk-CoV2 in your research, please cite:
-
-**Paper**: Predicting SARS-CoV-2 Susceptibility from Pre-Infection Serum Proteins: A Machine Learning Approach
-
-**GitHub Repository**: [https://github.com/NTOUBiomedicalAILAB/PreRisk-CoV2](https://github.com/NTOUBiomedicalAILAB/PreRisk-CoV2)
-
----
