@@ -237,16 +237,7 @@ conda activate prerisk
 python Internal-validation.py
 ```
 
-Monitor output:
-```
-第 1 次預測
-accuracy = 85.67 %
-Sensitivity = 82.35 %
-Specificity = 88.24 %
-AUROC = 0.9145
-AUPRC = 0.8876
-MCC = 0.7123
-```
+
 
 ### Step 3: Run External Validation
 
