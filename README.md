@@ -194,30 +194,6 @@ The framework employs a **hybrid KNN-GA approach**:
 
 ---
 
-## Dependencies
-
-### Core Requirements
-
-- Python ≥ 3.8
-- NumPy
-- Pandas
-- Scikit-learn
-- Matplotlib
-- OpenPyXL
-
-### Machine Learning Libraries
-
-- Keras / TensorFlow
-- imbalanced-learn (SMOTE)
-- XGBoost (optional for alternative models)
-
-### Full Dependency List
-
-```bash
-pip install numpy pandas scikit-learn matplotlib openpyxl keras tensorflow imbalanced-learn xgboost
-```
-
----
 
 ## Example Workflow
 
