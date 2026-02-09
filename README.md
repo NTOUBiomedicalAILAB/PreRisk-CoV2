@@ -256,30 +256,5 @@ Set `pr_roc = 1` in script to generate:
 
 ---
 
-## Troubleshooting
-
-### Common Issues
-
-**1. Missing Data Errors**
-- Check for NaN values using `Missing_Counts()` function
-- Ensure all 92 protein columns are present
-
-**2. Label Format Errors**
-- Verify `PCR result` column contains only `'Detected'` or `'Not'`
-- Case-sensitive matching required
-
-**3. SMOTE Errors**
-- Reduce `k_neighbors` if minority class has < 5 samples
-- Disable SMOTE by setting `smote = 0`
-
-**4. Memory Issues**
-- Reduce `loop` parameter for large datasets
-- Use batch processing for external validation
-
-**5. Excel File Locked**
-- Close output Excel files before running script
-- Or disable saving: `save = 0`
-
----
 
 
