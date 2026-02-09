@@ -1,162 +1,338 @@
 # PreRisk-CoV2
-Pre-exposure risk assessment for SARS-CoV-2 using plasma protein  biomarkers. Machine learning framework (KNN+GA) with 5-protein panel.  Dual validation: LOOCV internal + independent external cohort.  Python implementation.
 
-**📄 Paper:** *Predicting SARS-CoV-2 Susceptibility from Pre-Infection Serum Proteins: A Machine Learning Approach*
+## Overview
 
+PreRisk-CoV2 is a machine learning framework for pre-exposure risk assessment of SARS-CoV-2 susceptibility using plasma protein biomarkers. The main function is to predict infection risk **before exposure** based on a 5-protein panel identified through K-Nearest Neighbors (KNN) combined with Genetic Algorithm (GA) feature selection. The input consists of protein expression data (CSV format), and the output provides risk prediction results with comprehensive performance metrics.
 
-## 📋 Repository Scope
+The framework implements dual validation strategies: Leave-One-Out Cross-Validation (LOOCV) for internal validation and independent external cohort validation to ensure robust generalization performance.
 
-This repository contains:
-
-✅ **Internal Validation** - Leave-One-Out Cross-Validation (LOOCV) on discovery cohort  
-✅ **External Validation** - Independent validation on external cohort  
-✅ **KNN Classifier** - K-Nearest Neighbors with optimized parameters  
-✅ **SMOTE Oversampling** - Class imbalance handling
-
-
-<br>
-
-
-### What's Included
-
-✅ **Internal Validation** (`Internal-validation.py`)
-   - Leave-One-Out Cross-Validation (LOOCV)
-   - 100 iterations for robust performance estimation
-   - Discovery cohort 
-
-✅ **External Validation** (`External-validation.py`)
-   - Independent external cohort testing
-   - 100 iterations for validation
-   - Validation cohort 
-
-✅ **Machine Learning Pipeline**
-   - K-Nearest Neighbors (KNN) classifier
-   - SMOTE oversampling for class imbalance
-   - 5-protein biomarker panel (pre-selected features)
-
-✅ **Performance Metrics**
-   - AUROC, AUPRC
-   - Accuracy, Sensitivity, Specificity
-   - MCC (Matthews Correlation Coefficient)
-   - F1-score, Precision
-
-✅ **Visualization**
-   - ROC curves
-   - Precision-Recall curves
-
-<br>
+If you have any trouble installing or using PreRisk-CoV2, you can post an issue or directly email us. We welcome any suggestions.
 
 ---
 
-## 📋 Overview
+## Quick Install
 
-Two complementary approaches for selecting optimal protein biomarkers from high-dimensional data:
+*Note*: We suggest you install all packages using conda (both miniconda and [Anaconda](https://anaconda.org/) are ok).
 
-### 1. Genetic Algorithm with OAX
-- **Purpose**: Intelligent search in large feature spaces (50+ candidates)
-- **Innovation**: Orthogonal Array Crossover + Simulated Annealing
-- **Fitness**: Matthews Correlation Coefficient (MCC)
-- **Best for**: Exploring 92 protein candidates
+### Prepare the Environment
 
-### 2. Permutation Selection
-- **Purpose**: Exhaustive search for guaranteed optimal solutions
-- **Method**: Test all combinations C(n, k)
-- **Best for**: Confirming results with small candidate sets (≤10 proteins)
-
-Both methods use:
-- K-Nearest Neighbors (KNN) classifier
-- Leave-One-Out Cross-Validation (LOOCV)
-- SMOTE for handling class imbalance
-
----
-
-<br>
-
-## 🚀 Quick Start
-
-### Installation
+#### 1. First-time Setup
 
 ```bash
-# Clone the repository
+# Create conda environment with required dependencies
+conda create -n prerisk python=3.8 -y
+conda activate prerisk
+
+# Install core packages
+conda install numpy pandas scikit-learn matplotlib openpyxl -c conda-forge -y
+pip install keras tensorflow imbalanced-learn xgboost
+
+# Download PreRisk-CoV2 scripts
 git clone https://github.com/NTOUBiomedicalAILAB/PreRisk-CoV2.git
-cd PreRisk-CoV2
+cd PreRisk-CoV2/
 
-# Install dependencies
-pip install -r requirements.txt
+# Run an example (internal validation)
+python Internal-validation.py
+
+# Run external validation example
+python External-validation.py
 ```
-Usage
+
+#### 2. Subsequent Usage
+
+If the example runs without errors, you only need to activate your environment before using PreRisk-CoV2:
 
 ```bash
-# Internal validation - LOOCV on discovery cohort with 100 iterations
-python "Internal validation.py"
-
-# External validation - Independent cohort testing with 100 iterations
-python "External validation.py"
+conda activate prerisk
 ```
 
-<br>
+---
 
-## 📊 Data Availability
+## Usage
 
-### Public Datasets
+### Internal Validation (LOOCV)
 
-All data supporting this study are publicly available in the **Gene Expression Omnibus** (https://www.ncbi.nlm.nih.gov/geo) under accession numbers **GSE198449** and **GSE178967**.
+```bash
+python Internal-validation.py
+```
 
+**Key Parameters** (modifiable in script):
 
+- `file`: Input CSV file path (default: `Discovery.csv`)
+- `loop`: Number of cross-validation iterations (default: 100)
+- `smote`: SMOTE oversampling (0: disabled, 1: enabled)
+- `ID_index`: Protein indices for the 5-protein panel [3, 50, 40, 36, 83]
+- `excel_location`: Output directory for results (default: `\輸出結果`)
+- `save_new`: Enable/disable Excel output (0: disabled, 1: enabled)
 
-### Data Privacy
+**Configuration Options:**
 
-🔒 **Note**: The actual patient-level dataset files are not included in this repository due to privacy regulations and ethical considerations. Researchers can access the data through GEO with appropriate institutional review.
+- `train_process`: Display training process details (0/1)
+- `loop_result`: Show each cross-validation iteration (0/1)
+- `pr_roc`: Generate PR and ROC curves (0/1)
+- `random_protein`: Number of proteins for random selection (default: 7)
 
+### External Validation
 
+```bash
+python External-validation.py
+```
 
-<br>
+**Key Parameters** (modifiable in script):
 
-## 🔬 Complete Validation Pipeline
+- `train_input`: Training dataset CSV (default: `Discovery.csv`)
+- `test_input`: Independent validation dataset CSV (default: `Validation.csv`)
+- `loop`: Number of validation iterations (default: 100)
+- `smote`: SMOTE oversampling (1: enabled)
+- `accuracy_indice`: Selected protein biomarker indices [3, 50, 40, 36, 83]
+- `excel_location`: Output directory (default: `輸出結果\\`)
+- `save`: Enable Excel output (0/1)
 
-This repository provides to ensure your selected biomarkers are reliable and generalizable, you must complete the following validation steps:
+**KNN Hyperparameters:**
+
+- `n_neighbors`: Number of neighbors (default: 5 when set to 0)
+- `leaf_size`: Leaf size for tree algorithms
+- `algorithm`: Algorithm type (1: auto, 2: ball_tree, 3: kd_tree, 4: brute)
+- `weights`: Weight function (1: uniform, 2: distance)
+- `p`: Power parameter for Minkowski metric
 
 ---
 
+## Input Data Format
 
-### 📊 Step 1: Feature Selection 
+### CSV File Structure
 
+- **Column 1**: `sample ID` - Unique sample identifier
+- **Column 2**: `PCR result` - Ground truth label (`'Detected'` or `'Not'`)
+- **Columns 3-94**: 92 protein expression levels (normalized values)
 
+**Label Encoding:**
+- `'Detected'` → 1 (SARS-CoV-2 positive)
+- `'Not'` → 0 (SARS-CoV-2 negative)
 
-**Purpose**: Identify the optimal subset of protein biomarkers from 92 candidates.
-
-**Output**: A list of selected feature indices
-
-**Methods**:
-- **Genetic Algorithm with OAX**: Evolutionary search for large feature spaces
-- **Permutation Search**: Exhaustive evaluation for small candidate sets
+**Preprocessing:**
+- MinMax normalization (0-1 range)
+- Missing value handling via `Missing_Counts()` function
+- Optional SMOTE oversampling for class imbalance
 
 ---
 
+## Outputs
 
-### 🔄 Step 2: Internal Validation 
+### Internal Validation Output Structure
 
-**Purpose**: Evaluate the stability and reliability of selected features using the training dataset.
+```
+輸出結果/
+└── 內部驗證_[timestamp].xlsx
+    ├── Sheet: 編號 1
+    │   ├── Per-iteration metrics (Accuracy, Sensitivity, Specificity, etc.)
+    │   ├── Average performance (mean ± std)
+    │   └── Detailed per-fold results
+```
 
-**Why It's Important**:
-- Detects overfitting to the training data
-- Assesses model stability across different data splits
-- Provides confidence intervals for performance metrics
+### External Validation Output Structure
 
-**Methodology**:
+```
+輸出結果/
+└── 外部驗證結果_[timestamp].xlsx
+    ├── Sheet: 編號 1
+    │   ├── Average metrics across 100 iterations
+    │   ├── Standard deviations
+    │   └── Per-iteration detailed results
+```
 
-**Algorithm**: Leave-One-Out Cross-Validation (LOOCV)
+### Performance Metrics
 
-For each sample in the training set:
-1. Hold out one sample as test
-2. Train on remaining samples
-3. Apply SMOTE to balance training data
-4. Train KNN classifier (n_neighbors=5)
-5. Predict the held-out sample
-6. Record prediction and probability
+Both validation scripts output the following metrics:
 
-Repeat entire process 100 times with different random seeds
-Calculate mean ± standard deviation for all metrics
+- **Accuracy**: Overall classification accuracy
+- **Sensitivity (Recall)**: True Positive Rate (TPR)
+- **Specificity**: True Negative Rate (TNR)
+- **Precision**: Positive Predictive Value (PPV)
+- **F1-Score**: Harmonic mean of precision and recall
+- **AUROC**: Area Under Receiver Operating Characteristic curve
+- **AUPRC**: Area Under Precision-Recall Curve
+- **MCC**: Matthews Correlation Coefficient
 
+### Optional Visualizations
 
+When `pr_roc = 1`:
+- ROC curve with AUROC annotation
+- Precision-Recall curve with AUPRC annotation
+- Individual sample probability predictions
 
+---
+
+## Algorithm Details
+
+### Feature Selection Strategy
+
+The framework employs a **hybrid KNN-GA approach**:
+
+1. **Genetic Algorithm (GA)**: Optimizes protein subset selection
+2. **K-Nearest Neighbors (KNN)**: Classifier with distance-weighted voting
+3. **5-Protein Panel**: Final biomarker signature (indices: 3, 50, 40, 36, 83)
+
+### Validation Strategy
+
+- **Internal Validation**: LOOCV (Leave-One-Out Cross-Validation)
+  - Each sample serves as test set once
+  - Remaining samples for training
+  - 100 independent LOOCV runs for robustness
+
+- **External Validation**: Independent cohort testing
+  - Separate discovery and validation datasets
+  - Model trained on `Discovery.csv`
+  - Tested on `Validation.csv` (unseen data)
+  - 100 iterations with consistent protein panel
+
+### Class Imbalance Handling
+
+- **SMOTE** (Synthetic Minority Over-sampling Technique)
+- `k_neighbors=5` for synthetic sample generation
+- Applied only on training folds to prevent data leakage
+
+---
+
+## Dependencies
+
+### Core Requirements
+
+- Python ≥ 3.8
+- NumPy
+- Pandas
+- Scikit-learn
+- Matplotlib
+- OpenPyXL
+
+### Machine Learning Libraries
+
+- Keras / TensorFlow
+- imbalanced-learn (SMOTE)
+- XGBoost (optional for alternative models)
+
+### Full Dependency List
+
+```bash
+pip install numpy pandas scikit-learn matplotlib openpyxl keras tensorflow imbalanced-learn xgboost
+```
+
+---
+
+## Example Workflow
+
+### Step 1: Prepare Data
+
+Ensure your CSV files follow the required format:
+```csv
+sample ID,PCR result,Protein_1,Protein_2,...,Protein_92
+Sample001,Detected,0.45,0.32,...,0.78
+Sample002,Not,0.21,0.67,...,0.43
+```
+
+### Step 2: Run Internal Validation
+
+```bash
+conda activate prerisk
+python Internal-validation.py
+```
+
+Monitor output:
+```
+第 1 次預測
+accuracy = 85.67 %
+Sensitivity = 82.35 %
+Specificity = 88.24 %
+AUROC = 0.9145
+AUPRC = 0.8876
+MCC = 0.7123
+```
+
+### Step 3: Run External Validation
+
+```bash
+python External-validation.py
+```
+
+Check output Excel file in `輸出結果/` directory.
+
+### Step 4: Visualize Results (Optional)
+
+Set `pr_roc = 1` in script to generate:
+- ROC and PR curves
+- Probability distributions
+- Confusion matrices
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+**1. Missing Data Errors**
+- Check for NaN values using `Missing_Counts()` function
+- Ensure all 92 protein columns are present
+
+**2. Label Format Errors**
+- Verify `PCR result` column contains only `'Detected'` or `'Not'`
+- Case-sensitive matching required
+
+**3. SMOTE Errors**
+- Reduce `k_neighbors` if minority class has < 5 samples
+- Disable SMOTE by setting `smote = 0`
+
+**4. Memory Issues**
+- Reduce `loop` parameter for large datasets
+- Use batch processing for external validation
+
+**5. Excel File Locked**
+- Close output Excel files before running script
+- Or disable saving: `save = 0`
+
+---
+
+## Citation
+
+If you use PreRisk-CoV2 in your research, please cite:
+
+**Paper**: Predicting SARS-CoV-2 Susceptibility from Pre-Infection Serum Proteins: A Machine Learning Approach
+
+**GitHub Repository**: [https://github.com/NTOUBiomedicalAILAB/PreRisk-CoV2](https://github.com/NTOUBiomedicalAILAB/PreRisk-CoV2)
+
+---
+
+## Contact
+
+For questions, bug reports, or feature requests:
+- **GitHub Issues**: [https://github.com/NTOUBiomedicalAILAB/PreRisk-CoV2/issues](https://github.com/NTOUBiomedicalAILAB/PreRisk-CoV2/issues)
+- **Email**: [Your contact email]
+
+---
+
+## License
+
+[Specify your license here, e.g., MIT, GPL-3.0, etc.]
+
+---
+
+## Acknowledgments
+
+This work was supported by [funding sources if applicable]. We thank all contributors and the research community for valuable feedback.
+
+---
+
+## Version History
+
+- **v1.0** (2026-02): Initial release with KNN-GA framework
+  - 5-protein biomarker panel
+  - Dual validation strategy (LOOCV + external cohort)
+  - Comprehensive performance metrics
+
+---
+
+## References
+
+1. Internal validation: Leave-One-Out Cross-Validation (LOOCV)
+2. External validation: Independent cohort testing
+3. Feature selection: Genetic Algorithm (GA) + K-Nearest Neighbors (KNN)
+4. Class balancing: SMOTE (Synthetic Minority Over-sampling Technique)
