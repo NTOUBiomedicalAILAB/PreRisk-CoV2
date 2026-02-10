@@ -31,11 +31,9 @@ pip install imbalanced-learn
 git clone https://github.com/NTOUBiomedicalAILAB/PreRisk-CoV2.git
 cd PreRisk-CoV2/
 
-# Run an example (internal validation)
-python prerisk_cov2.py --mode internal --input Discovery.csv --n-iterations 10
+# Quick test (internal validation, 10 iterations)
+python prerisk_cov2.py --mode internal --input Discovery.csv --n-iterations 10 --verbose
 
-# Run external validation example
-python prerisk_cov2.py --mode external --train-input Discovery.csv --test-input Validation.csv --n-iterations 10
 ```
 
 #### 2. Subsequent Usage
