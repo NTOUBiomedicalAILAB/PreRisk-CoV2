@@ -1,0 +1,10 @@
+📊 Data Availability
+
+Public Datasets:
+All data supporting this study are publicly available in the Gene Expression Omnibus (GEO) under the following accession numbers:
+
+- GSE198449
+- GSE178967
+
+You can download the datasets from:
+https://www.ncbi.nlm.nih.gov/geo/
