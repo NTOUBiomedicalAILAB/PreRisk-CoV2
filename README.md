@@ -20,7 +20,7 @@ If you have any trouble installing or using PreRisk-CoV2, you can post an issue 
 
 ```bash
 # Create conda environment with required dependencies
-conda create -n prerisk python=3.8 -y
+conda create -n prerisk python=3.9 -y
 conda activate prerisk
 
 # Install core packages
