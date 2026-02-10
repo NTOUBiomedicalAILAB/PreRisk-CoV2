@@ -4,7 +4,11 @@
 
 PreRisk-CoV2 is a machine learning framework for pre-exposure risk assessment of SARS-CoV-2 susceptibility using plasma protein biomarkers. The main function is to predict infection risk **before exposure** based on a 5-protein panel identified through K-Nearest Neighbors (KNN) combined with Genetic Algorithm (GA) feature selection. The input consists of protein expression data (CSV format), and the output provides risk prediction results with comprehensive performance metrics.
 
+<br>
 
+**📄 Paper:** *Predicting SARS-CoV-2 Susceptibility from Pre-Infection Serum Proteins: A Machine Learning Approach*
+
+<br>
 
 If you have any trouble installing or using PreRisk-CoV2, you can post an issue or directly email us. We welcome any suggestions.
 
@@ -232,5 +236,15 @@ Set `pr_roc = 1` in script to generate:
 
 ---
 
+## 📊 Data Availability
+
+### Public Datasets
+
+All data supporting this study are publicly available in the **Gene Expression Omnibus** (https://www.ncbi.nlm.nih.gov/geo) under accession numbers **GSE198449** and **GSE178967**.
+
+### Data Privacy
+🔒 **Note**: The actual patient-level dataset files are not included in this repository due to privacy regulations and ethical considerations. Researchers can access the data through GEO with appropriate institutional review.
+
+---
 
 
