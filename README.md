@@ -80,18 +80,19 @@ python prerisk_cov2.py \
 **Full Example**:
 
 ```bash
-python prerisk_cov2.py \
-    --mode internal \
-    --input Discovery.csv \
-    --protein-indices 3 50 40 36 83 \
-    --n-neighbors 5 \
-    --weights distance \
-    --algorithm kd_tree \
-    --use-smote \
-    --n-iterations 100 \
-    --plot-curves \
-    --verbose \
+python prerisk_cov2.py ^
+    --mode internal ^
+    --input Discovery.csv ^
+    --protein-indices 3 50 40 36 83 ^
+    --n-neighbors 5 ^
+    --weights distance ^
+    --algorithm kd_tree ^
+    --use-smote ^
+    --n-iterations 100 ^
+    --plot-curves ^
+    --verbose ^
     --output-dir ./results
+
 ```
 
 ### External Validation
