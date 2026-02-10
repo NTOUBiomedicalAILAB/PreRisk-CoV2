@@ -98,11 +98,11 @@ python prerisk_cov2.py ^
 ### External Validation
 
 ```bash
-python prerisk_cov2.py \
-    --mode external \
-    --train-input Discovery.csv \
-    --test-input Validation.csv \
-    --n-iterations 100 \
+python prerisk_cov2.py ^
+    --mode external ^
+    --train-input Discovery.csv ^
+    --test-input Validation.csv ^
+    --n-iterations 100 ^
     --verbose
 ```
 
