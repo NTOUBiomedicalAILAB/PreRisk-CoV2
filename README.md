@@ -79,7 +79,7 @@ python prerisk_cov2.py \
 
 **Full Example**:
 
-```bash
+```cmd
 python prerisk_cov2.py ^
     --mode internal ^
     --input Discovery.csv ^
@@ -92,19 +92,42 @@ python prerisk_cov2.py ^
     --plot-curves ^
     --verbose ^
     --output-dir ./results
-
 ```
+
+**Or use single-line:**
+
+
+```bash
+python prerisk_cov2.py --mode internal --input Discovery.csv --protein-indices 3 50 40 36 83 --n-neighbors 5 --weights distance --algorithm kd_tree --use-smote --n-iterations 100 --plot-curves --verbose --output-dir ./results
+```
+
+---
 
 ### External Validation
 
-```bash
+```cmd
 python prerisk_cov2.py ^
     --mode external ^
     --train-input Discovery.csv ^
     --test-input Validation.csv ^
+    --protein-indices 3 50 40 36 83 ^
+    --n-neighbors 5 ^
+    --weights distance ^
+    --algorithm kd_tree ^
+    --use-smote ^
     --n-iterations 100 ^
-    --verbose
+    --plot-curves ^
+    --verbose ^
+    --output-dir ./results
 ```
+
+**Or use single-line:**
+
+```bash
+python prerisk_cov2.py --mode external --train-input Discovery.csv --test-input Validation.csv --protein-indices 3 50 40 36 83 --n-neighbors 5 --weights distance --algorithm kd_tree --use-smote --n-iterations 100 --plot-curves --verbose --output-dir ./results
+```
+
+
 
 **Key Parameters** (command-line arguments):
 
