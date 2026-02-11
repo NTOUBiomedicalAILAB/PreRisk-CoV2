@@ -247,36 +247,6 @@ results/
 └── external_roc_pr.png
 ```
 
----
-
-## Algorithm Details
-
-### Feature Selection Strategy
-
-The framework employs a **hybrid KNN-GA approach**:
-
-1. **Genetic Algorithm (GA)**: Optimizes protein subset selection
-2. **K-Nearest Neighbors (KNN)**: Classifier with distance-weighted voting
-3. **5-Protein Panel**: Final biomarker signature (indices: 3, 50, 40, 36, 83)
-
-### Validation Strategy
-
-**Internal Validation: LOOCV (Leave-One-Out Cross-Validation)**
-- Each sample serves as test set once
-- Remaining samples for training
-- 100 independent LOOCV runs for robustness
-
-**External Validation: Independent cohort testing**
-- Separate discovery and validation datasets
-- Model trained on `Discovery.csv`
-- Tested on `Validation.csv` (unseen data)
-- 100 iterations with consistent protein panel
-
-### Class Imbalance Handling
-
-- **SMOTE** (Synthetic Minority Over-sampling Technique)
-- `k_neighbors=5` for synthetic sample generation
-- Applied only on training folds to prevent data leakage
 
 ---
 
