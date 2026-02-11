@@ -38,7 +38,7 @@ python prerisk_cov2.py --mode internal --input Discovery.csv --n-iterations 10 -
 
 #### 2. Subsequent Usage
 
-If the example runs without errors, you only need to activate your environment before using PreRisk-CoV2:
+If the runs without errors, you only need to activate your environment before using PreRisk-CoV2:
 
 ```bash
 conda activate prerisk
