@@ -51,10 +51,10 @@ conda activate prerisk
 ### Internal Validation (LOOCV)
 
 ```bash
-python prerisk_cov2.py \
-    --mode internal \
-    --input Discovery.csv \
-    --n-iterations 100 \
+python prerisk_cov2.py ^
+    --mode internal ^
+    --input Discovery.csv ^
+    --n-iterations 100 ^
     --verbose
 ```
 
