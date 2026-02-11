@@ -4,7 +4,7 @@
 PreRisk-CoV2: Pre-exposure Risk Assessment for SARS-CoV-2
 ==========================================================
 A unified machine learning framework for predicting SARS-CoV-2 susceptibility
-using plasma protein biomarkers with KNN-GA approach.
+using Serum protein biomarkers with KNN-GA approach.
 
 Author: NTOU Biomedical AI LAB
 GitHub: https://github.com/NTOUBiomedicalAILAB/PreRisk-CoV2
