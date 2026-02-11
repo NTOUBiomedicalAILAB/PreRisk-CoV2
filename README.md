@@ -1,4 +1,4 @@
-# PreRisk-CoV2
+![PreRisk-CoV2](logo.png)
 
 ## Overview
 
