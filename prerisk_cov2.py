@@ -218,9 +218,9 @@ def save_results_to_excel(results, output_path, sheet_name, mode='internal'):
 
     # Header
     if mode == 'internal':
-        worksheet.append(['以下為每輪交叉驗證之結果:'])
+        worksheet.append(['The following are the results of each round of cross-validation.:'])
     else:
-        worksheet.append(['以下為每輪預測之結果:'])
+        worksheet.append(['The following are the results of each round of predictions:'])
 
     worksheet.append([''])
     worksheet.append(['Iteration', 'Accuracy', 'Sensitivity', 'Specificity', 
