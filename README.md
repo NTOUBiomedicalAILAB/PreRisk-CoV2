@@ -2,7 +2,7 @@
 
 ## Overview
 
-PreRisk-CoV2 is a machine learning framework for pre-exposure risk assessment of SARS-CoV-2 susceptibility using plasma protein biomarkers. The main function is to predict infection risk **before exposure** based on a 5-protein panel identified through K-Nearest Neighbors (KNN) combined with Genetic Algorithm (GA) feature selection. The input consists of protein expression data (CSV format), and the output provides risk prediction results with comprehensive performance metrics.
+PreRisk-CoV2 is a machine learning framework for pre-exposure risk assessment of SARS-CoV-2 susceptibility using Serum protein biomarkers. The main function is to predict infection risk **before exposure** based on a 5-protein panel identified through K-Nearest Neighbors (KNN) combined with Genetic Algorithm (GA) feature selection. The input consists of protein expression data (CSV format), and the output provides risk prediction results with comprehensive performance metrics.
 
 📄 **Paper**: Predicting SARS-CoV-2 Susceptibility from Pre-Infection Serum Proteins: A Machine Learning Approach
 
