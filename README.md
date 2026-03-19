@@ -59,7 +59,7 @@ Since the calculation is performed on encrypted data.
 The resulting file (`encrypted_result.bin`) is still encrypted and cannot be read by the client. 
 
 
-
+<br>
 
 #### 2. Subsequent Usage
 
