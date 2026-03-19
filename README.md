@@ -41,6 +41,7 @@ cd PreRisk-CoV2/
 
 
 Quick test
+
 Step 1: Encrypts your CSV to a secure .bin format
 ```bash
 python encrypt.py --input Validation.csv --output Validation_encrypted.bin
@@ -54,6 +55,7 @@ python prerisk_cov2.py --mode run --input Validation_encrypted.bin
 
 Step 3: Decryption & Final Report (Action Required)
 Since the calculation is performed on encrypted data.
+
 The resulting file (`encrypted_result.bin`) is still encrypted and cannot be read by the client. 
 
 
