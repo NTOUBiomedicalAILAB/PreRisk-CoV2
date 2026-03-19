@@ -19,32 +19,45 @@ If you have any trouble installing or using PreRisk-CoV2, you can post an issue 
 
 #### 1. First-time Setup
 
+
+Create conda environment with required dependencies
 ```bash
-# Create conda environment with required dependencies
 conda create -n PreRisk_CoV2 python=3.9 -y
 conda activate PreRisk_CoV2
+```
 
-# Install core packages
+
+Install core packages
+```bash
 pip install numpy pandas scikit-learn matplotlib openpyxl imbalanced-learn tenseal
+```
 
-# Download PreRisk-CoV2 scripts
+
+Download PreRisk-CoV2 scripts
+```bash
 git clone https://github.com/NTOUBiomedicalAILAB/PreRisk-CoV2.git
 cd PreRisk-CoV2/
+```
 
 
-# Quick test
-# Step 1: Encrypts your CSV to a secure .bin format
+Quick test
+Step 1: Encrypts your CSV to a secure .bin format
+```bash
 python encrypt.py --input Validation.csv --output Validation_encrypted.bin
+```
 
-# Step 2: Performs encrypted distance calculation and generates a result
+
+Step 2: Performs encrypted distance calculation and generates a result
+```bash
 python prerisk_cov2.py --mode run --input Validation_encrypted.bin
+```
 
-# Step 3: Decryption & Final Report (Action Required)
+Step 3: Decryption & Final Report (Action Required)
 Since the calculation is performed on encrypted data.
 The resulting file (`encrypted_result.bin`) is still encrypted and cannot be read by the client. 
 
 
-```
+
 
 #### 2. Subsequent Usage
 
