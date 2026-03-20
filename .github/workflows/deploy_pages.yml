@@ -1,34 +1,42 @@
-name: Secure Deploy to GitHub Pages
+name: PreRisk-CoV2 TenSEAL Analyzer
 
 on:
-  push:
-    branches: ["main"]
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+  repository_dispatch:
+    types: [run-analysis] 
 
 jobs:
-  deploy:
+  analyze:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Inject Secret into HTML
-        run: |
-          sed -i "s/___GH_PAT_PLACEHOLDER___/${{ secrets.MY_TRIGGER_PAT }}/g" index.html
-          echo "✅ Secret injected successfully"
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5 # 改成 configure-pages
-      
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          path: '.'
+          python-version: '3.9'
 
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install tenseal numpy 
+      - name: Download Private Key
+        run: |
+          wget -O private_key.bin "${{ secrets.PRIVATE_KEY_URL }}"
+          echo "✅ Private key downloaded."
+
+      - name: Restore Encrypted Data
+        run: |
+          echo "${{ github.event.client_payload.file_data }}" | base64 -d > encrypted_result.bin
+          echo "✅ Encrypted data restored."
+
+      - name: Run Decryption and Analysis
+        run: |
+          python prerisk_cov2.py --mode decrypt --encrypted-result encrypted_result.bin
+          
+      - name: Upload Results (Optional)
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: analysis-report
+          path: decrypted_output.txt # 假設您的程式會產生這個結果檔
