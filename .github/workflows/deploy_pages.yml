@@ -22,7 +22,7 @@ jobs:
           pip install numpy pandas scikit-learn matplotlib openpyxl imbalanced-learn tenseal
       - name: Download Private Key
         run: |
-          wget -O private_context.bin "${{ secrets.PRIVATE_KEY_URL }}"
+          wget -O private_context.bin "${{ secrets.PRIVATE_KEY }}"
           echo "✅ Private context (key) downloaded as private_context.bin"
 
       - name: Restore Encrypted Data
