@@ -114,7 +114,7 @@ By default, the system automatically extracts and encrypts the following 7 bioma
 
 ### Public Datasets
 
-De-identified individual participant data supporting the findings of this study are available in the Gene Expression Omnibus (GEO) (https://www.ncbi.nlm.nih.gov/geo) under accession num-bers **GSE198449 (CHARM cohort)** and **GSE178967 (CEIM cohort)**.
+De-identified individual participant data supporting the findings of this study are available in the Gene Expression Omnibus (GEO) (https://www.ncbi.nlm.nih.gov/geo) under accession numbers **GSE198449 (CHARM cohort)** and **GSE178967 (CEIM cohort)**.
 
 1. NPX data for the **CHARM cohort** are accessible via the supplementary material of Soares-Schanoski et al. https://pmc.ncbi.nlm.nih.gov/articles/PMC9037090
 2. NPX data for the **CEIM cohort** are available at the following repository: [https://github.com/hzc363/COVID19_system_immunology/blob/master/OLINK\%20Proteomics/olink.csv](https://github.com/hzc363/COVID19_system_immunology/blob/master/OLINK%20Proteomics/olink.csv)
