@@ -678,7 +678,7 @@ def mode_decrypt(args):
     os.makedirs(args.output_dir, exist_ok=True)
     rows = {
         'Sample_ID': list(query_ids),
-        'Prediction': ['Detected' if p == 1 else 'Not Detected' for p in preds],
+        'Prediction': ['High Infection Risk' if p == 1 else 'Low Infection Risk' for p in preds],
         'Risk_Score': np.round(probs, 4),
     }
     
