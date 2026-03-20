@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PreRisk-CoV2 - Secure Task Submission</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; background-color: #f0f4f8; }
+        .container { background-color: white; padding: 40px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); text-align: center; }
+        h2 { color: #1a365d; margin-bottom: 10px; }
+        p.subtitle { color: #718096; font-size: 15px; margin-bottom: 30px; }
+        .upload-area { border: 2px dashed #cbd5e0; padding: 40px 20px; border-radius: 8px; background-color: #f8fafc; transition: all 0.3s ease; margin-bottom: 25px; }
+        .upload-area:hover { border-color: #4299e1; background-color: #ebf8ff; }
+        input[type="file"] { display: none; }
+        .custom-file-btn { display: inline-block; padding: 12px 24px; background-color: #e2e8f0; color: #4a5568; border-radius: 6px; cursor: pointer; font-weight: 600; transition: background-color 0.2s; }
+        .custom-file-btn:hover { background-color: #cbd5e0; }
+        #file-name { margin-top: 15px; font-size: 14px; color: #2d3748; font-weight: bold; }
+        button.submit-btn { background-color: #3182ce; color: white; padding: 16px; border: none; border-radius: 8px; cursor: pointer; width: 100%; font-size: 18px; font-weight: bold; transition: background-color 0.2s; }
+        button.submit-btn:hover { background-color: #2b6cb0; }
+        button.submit-btn:disabled { background-color: #a0aec0; cursor: not-allowed; }
+        #status-message { margin-top: 20px; padding: 15px; border-radius: 6px; display: none; font-size: 14px; text-align: left; word-break: break-all; }
+        .success { background-color: #c6f6d5; color: #22543d; border-left: 4px solid #38a169; }
+        .error { background-color: #fed7d7; color: #822727; border-left: 4px solid #e53e3e; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>PreRisk-CoV2 Cloud Analysis System</h2>
+    <p class="subtitle">Please upload your locally encrypted <strong>.bin</strong> file.</p>
+    
+    <div class="upload-area">
+        <label for="binFileInput" class="custom-file-btn">
+            📂 Select .bin File
+        </label>
+        <input id="binFileInput" type="file" accept=".bin" onchange="handleFileSelect()" />
+        <div id="file-name">No file selected</div>
+    </div>
+    
+    <button id="submitBtn" class="submit-btn" onclick="processAndSendFile()" disabled>Upload & Analyze</button>
+
+    <div id="status-message"></div>
+</div>
+
+<script>
+    function handleFileSelect() {
+        const fileInput = document.getElementById('binFileInput');
+        const fileNameDisplay = document.getElementById('file-name');
+        const submitBtn = document.getElementById('submitBtn');
+
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            fileNameDisplay.innerHTML = `Ready: <span style="color: #3182ce;">${file.name}</span> (${(file.size / 1024).toFixed(2)} KB)`;
+            submitBtn.disabled = false; 
+        } else {
+            fileNameDisplay.innerHTML = "No file selected";
+            submitBtn.disabled = true; 
+        }
+    }
+
+    function processAndSendFile() {
+        const fileInput = document.getElementById('binFileInput');
+        const file = fileInput.files[0];
+        const statusBox = document.getElementById('status-message');
+        const submitBtn = document.getElementById('submitBtn');
+
+        if (!file) return;
+
+        submitBtn.disabled = true;
+        submitBtn.innerText = "⏳ Processing and sending...";
+
+        const reader = new FileReader();
+
+        reader.onload = function(event) {
+            const dataURL = event.target.result;
+            const base64String = dataURL.split(',')[1];
+
+            // ==========================================
+            // 🔑 Your Exclusive API Configuration Zone
+            // ==========================================
+            const GITHUB_USER = "NTOUBiomedicalAILAB";
+            const REPO_NAME = "PreRisk-CoV2";
+            
+            const PAT_TOKEN = "___GH_PAT_PLACEHOLDER___";
+
+            statusBox.style.display = 'block';
+            statusBox.className = 'success';
+            statusBox.innerHTML = `File read successfully. Contacting the cloud server...`;
+
+            // Officially triggering the GitHub Actions API!
+            fetch(`https://api.github.com/repos/${GITHUB_USER}/${REPO_NAME}/dispatches`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `token ${PAT_TOKEN}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                },
+                body: JSON.stringify({
+                    event_type: "run-analysis",
+                    client_payload: { file_data: base64String }
+                })
+            })
+            .then(response => {
+                if(response.ok) {
+                    statusBox.innerHTML = `<strong>✅ Task successfully sent to the cloud server!</strong><br><br>The system is now performing Homomorphic Encryption computations. You can check the progress in GitHub Actions.`;
+                    submitBtn.innerText = "Sent Successfully!";
+                } else {
+                    statusBox.className = 'error';
+                    statusBox.innerHTML = `<strong>❌ Transmission Failed!</strong><br>Server returned status code: ${response.status}.<br>Please check if your PAT Token is pasted correctly and has the right permissions.`;
+                    submitBtn.innerText = "Retry";
+                    submitBtn.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                statusBox.className = 'error';
+                statusBox.innerHTML = `<strong>❌ Network Connection Error!</strong><br>Please check your internet connection.`;
+                submitBtn.innerText = "Retry";
+                submitBtn.disabled = false;
+            });
+        };
+
+        reader.readAsDataURL(file);
+    }
+</script>
+
+</body>
+</html>
