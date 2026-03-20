@@ -22,7 +22,7 @@ jobs:
           pip install tenseal numpy 
       - name: Download Private Key
         run: |
-          wget -O private_key.bin "${{ secrets.PRIVATE_KEY_URL }}"
+          wget -O private_key.bin "${{ secrets.PRIVATE_KEY }}"
           echo "✅ Private key downloaded."
 
       - name: Restore Encrypted Data
