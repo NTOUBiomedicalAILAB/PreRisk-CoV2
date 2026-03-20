@@ -74,18 +74,35 @@ cd PreRisk-CoV2/
 
 <br>
 
-## Decryption & Final Report (Action Required)
-Since the calculation is performed on encrypted data, the resulting file (`encrypted_result.bin`) is still encrypted and cannot be read by the client. 
 
-**Please send the generated `encrypted_result.bin` back to our lab for private key decryption and final diagnostic report generation.**
+## Submit Your Analysis Request
 
-> **Contact Email:** [ntoubiomedicalai2026@gmail.com]
-> 
-> *Note: Our lab only possesses the private key to decrypt the calculation result. Your raw protein data remains private and invisible to us.*
+1. **Upload your `encrypted_result.bin`** to Google Drive
+2. **Set sharing permissions**: Right-click → Share → "Anyone with the link" → Viewer
+3. **Copy the shareable link**
 
-<br>
+4. **Send this exact email**:
+
+```txt
+To: ntoubiomedicalai2026@gmail.com
+Subject: [PreRisk-CoV2] Analysis Request
+Body: [Paste your Google Drive link here]
+```
+
+## Expected Response Time
+
+**⏱️ Server will reply within 2 minutes** with:
+- ✅ `Client_Report_Decrypted.csv` (analysis results)
+- ✅ Privacy confirmation (your data deleted)
+
+## Report Contains
+- Sample ID
+- PCR Prediction (Detected/Not Detected)
+- Risk Level (High/Low Infection Risk)  
+- Risk Score (0.0-1.0)
 
 ---
+
 
 ## 📊 Input Data Format
 
