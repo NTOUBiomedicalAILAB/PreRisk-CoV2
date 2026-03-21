@@ -9,87 +9,20 @@ De-identified individual participant data supporting the findings of this study 
 
 ---
 
-## Input Data Format
+## 📊 Input Data Format
+The input consists of protein expression data (CSV format), and the output provides infection risk prediction.
+To ensure compatibility with the FHE encryption and prediction pipeline, please format your input CSV as follows:
 
 ### CSV File Structure
 
-- **Column 1**: `sample ID` - Unique sample identifier
-- **Column 2**: `PCR result` - Ground truth label (`'Detected'` or `'Not'`)
-- **Columns 3-94**: 92 protein expression levels (normalized values)
+- **Column 0**: `sample ID` - Unique identifier for each patient/sample.
+- **Column 1**: `PCR result` - Ground truth labels (can be `Detected`/`Not` or `1`/`0`).
+  - *Note: If using `--no-labels` for pure prediction, this column can contain placeholders.*
+- **Column 2 ~ N**: Protein expression levels (e.g., Olink NPX values).
 
-**Label Encoding:**
-- `'Detected'` → 1 (SARS-CoV-2 positive)
-- `'Not'` → 0 (SARS-CoV-2 negative)
+### 🧬 The 7-Protein Panel (Default)
+By default, the system automatically extracts and encrypts the following 7 biomarkers using  name matching:
+> **MCP-3, LIF-R, TRANCE, FGF-23, NT-3, CXCL1, CXCL6**
 
-**Preprocessing:**
-- MinMax normalization (0-1 range)
-- Missing value handling via `Missing_Counts()` function
-- Optional SMOTE oversampling for class imbalance
+<br>
 
-**Example CSV:**
-
-```csv
-sample ID,PCR result,Protein_1,Protein_2,...,Protein_92
-Sample001,Detected,0.45,0.32,...,0.78
-Sample002,Not,0.21,0.67,...,0.43
-Sample003,Detected,0.89,0.54,...,0.66
-```
-
----
-
-## Outputs
-
-### Internal Validation Output Structure
-
-```
-results/
-└── internal_validation_[timestamp].xlsx
-    ├── Sheet: LOOCV_Results
-    │   ├── Per-iteration metrics (Accuracy, Sensitivity, Specificity, etc.)
-    │   ├── Average performance (mean ± std)
-    │   └── Detailed per-fold results
-```
-
-### External Validation Output Structure
-
-```
-results/
-└── external_validation_[timestamp].xlsx
-    ├── Sheet: External_Results
-    │   ├── Average metrics across 100 iterations
-    │   ├── Standard deviations
-    │   └── Per-iteration detailed results
-```
-
-### Performance Metrics
-
-Both validation modes output the following metrics:
-
-- **Accuracy**: Overall classification accuracy
-- **Sensitivity (Recall)**: True Positive Rate (TPR)
-- **Specificity**: True Negative Rate (TNR)
-- **Precision**: Positive Predictive Value (PPV)
-- **F1-Score**: Harmonic mean of precision and recall
-- **AUROC**: Area Under Receiver Operating Characteristic curve
-- **AUPRC**: Area Under Precision-Recall Curve
-- **MCC**: Matthews Correlation Coefficient
-
-### Optional Visualizations
-
-When `--plot-curves` is enabled:
-
-- ROC curve with AUROC annotation
-- Precision-Recall curve with AUPRC annotation
-- Individual sample probability predictions
-
-**Output files:**
-```
-results/
-├── internal_validation_[timestamp].xlsx
-├── external_validation_[timestamp].xlsx
-├── internal_roc_pr.png
-└── external_roc_pr.png
-```
-
-
----
