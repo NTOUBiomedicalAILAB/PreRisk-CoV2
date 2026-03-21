@@ -39,27 +39,42 @@ git clone https://github.com/NTOUBiomedicalAILAB/PreRisk-CoV2.git
 cd PreRisk-CoV2/
 ```
 
+---
 
-Quick test
-
+## Quick test
+## Clinical datasets should follow ethical and privacy regulations
 Step 1: Encrypts your CSV to a secure .bin format
 ```bash
 python encrypt.py --input Validation.csv --output Validation_encrypted.bin
 ```
 
 
-Step 2: Performs encrypted distance calculation and generates a result
+Step 2: Set up encrypted-style KNN computation 
+
 ```bash
 python prerisk_cov2.py --mode run --input Validation_encrypted.bin
 ```
 
-Step 3: Decryption & Final Report (Action Required)
-Since the calculation is performed on encrypted data.
+Step 3: Decrypt the encrypted results upon request to generate the final report
 
-The resulting file (`encrypted_result.bin`) is still encrypted and cannot be read by the client. 
+- Step 3A: Upload your encrypted_result.bin to Google Drive
+- Step 3B: Set sharing permissions  Right-click → Share → "Anyone with the link" → Viewer
+- Step 3C: Copy the shareable link
+- Step 3D: Send this exact email:
+ ```txt
+To: ntoubiomedicalai2026@gmail.com
+Subject: [PreRisk-CoV2] Analysis Request
+Body: [Paste your Google Drive link here]
+```
 
 
-<br>
+
+Report Contains  
+
+- Sample ID  
+- Infection Risk Prediction (High/Low)  
+- Risk Score (0.0-1.0)  
+
 
 #### 2. Subsequent Usage
 
@@ -72,22 +87,6 @@ cd PreRisk-CoV2/
 
 ---
 
-<br>
-
-
-## Submit Your Analysis Request
-
-1. **Upload your `encrypted_result.bin`** to Google Drive
-2. **Set sharing permissions**: Right-click → Share → "Anyone with the link" → Viewer
-3. **Copy the shareable link**
-
-4. **Send this exact email**:
-
-```txt
-To: ntoubiomedicalai2026@gmail.com
-Subject: [PreRisk-CoV2] Analysis Request
-Body: [Paste your Google Drive link here]
-```
 
 ## Expected Response Time
 
@@ -95,17 +94,13 @@ Body: [Paste your Google Drive link here]
 - ✅ `Client_Report_Decrypted.csv` (analysis results)
 - ✅ Privacy confirmation (your data deleted)
 
-## Report Contains
-- Sample ID
-- PCR Prediction (Detected/Not Detected)
-- Risk Level (High/Low Infection Risk)  
-- Risk Score (0.0-1.0)
+
 
 ---
 
 
 ## 📊 Input Data Format
-
+The input consists of protein expression data (CSV format), and the output provides infection risk prediction.
 To ensure compatibility with the FHE encryption and prediction pipeline, please format your input CSV as follows:
 
 ### CSV File Structure
