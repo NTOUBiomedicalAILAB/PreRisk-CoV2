@@ -1,4 +1,4 @@
-![PreRisk-CoV2](logo_v2.ipg)
+![PreRisk-CoV2](logo_v2.jpg)
 
 ## Overview
 
