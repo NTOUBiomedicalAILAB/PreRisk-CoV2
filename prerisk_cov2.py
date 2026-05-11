@@ -42,19 +42,6 @@ def resolve_protein_indices(protein_id, panel=None):
     """
     Resolve protein names to 0-based indices in the protein_id list.
     Matching is case-insensitive and strips surrounding whitespace.
-
-    Parameters
-    ----------
-    protein_id : list[str]   – full list of protein column names from the CSV
-    panel      : list[str]   – target protein names; defaults to DEFAULT_PANEL
-
-    Returns
-    -------
-    indices : list[int]      – resolved 0-based indices (same order as panel)
-
-    Raises
-    ------
-    ValueError  if any panel protein is not found in protein_id
     """
     if panel is None:
         panel = DEFAULT_PANEL
@@ -108,6 +95,8 @@ def print_progress_bar(iteration, total, prefix='Progress', suffix='Complete',
 
 ###############################################################################
 # DATA PROCESSING
+# NOTE: Each CSV is normalized independently (fit_transform on its own data),
+#       consistent with the original research code.
 ###############################################################################
 
 def missing_counts(data):
@@ -121,7 +110,11 @@ def missing_counts(data):
     return df_mc
 
 
-def data_processing(df, scaler=None):
+def data_processing(df):
+    """
+    Process a single CSV dataframe.
+    MinMaxScaler is always fit on this df's own data (independent normalization).
+    """
     sample_id  = df['sample ID'].values
     protein_id = df.columns.tolist()[2:94]
 
@@ -132,13 +125,10 @@ def data_processing(df, scaler=None):
     label    = df_proc['PCR result'].values
     features = df_proc.drop(['PCR result'], axis=1).values
 
-    if scaler is None:
-        scaler   = preprocessing.MinMaxScaler(feature_range=(0, 1))
-        features = scaler.fit_transform(features)
-    else:
-        features = scaler.transform(features)
+    scaler   = preprocessing.MinMaxScaler(feature_range=(0, 1))
+    features = scaler.fit_transform(features)
 
-    return sample_id, protein_id, features, label, scaler
+    return sample_id, protein_id, features, label
 
 
 ###############################################################################
@@ -316,12 +306,11 @@ def internal_validation(args):
 
     print(f'[INFO] Loading data from: {args.input}')
     df = pd.read_csv(args.input)
-    sample_id, protein_id, features, label, _ = data_processing(df)
+    sample_id, protein_id, features, label = data_processing(df)
 
     print(f'[INFO] Dataset shape        : {features.shape}')
     print(f'[INFO] Class distribution   : {np.bincount(label.astype(int))}')
 
-    # ── Protein selection: name-based auto-lookup OR manual index override ──
     if args.protein_indices:
         protein_indices = args.protein_indices
         print(f'[INFO] Selected proteins ({len(protein_indices)}) [manual index]: '
@@ -424,6 +413,8 @@ def internal_validation(args):
 
 ###############################################################################
 # 2. EXTERNAL VALIDATION
+# NOTE: train and test are each normalized independently (fit_transform),
+#       matching the original research code behaviour.
 ###############################################################################
 
 def external_validation(args):
@@ -433,16 +424,15 @@ def external_validation(args):
 
     print(f'[INFO] Loading training data from : {args.train_input}')
     train_df = pd.read_csv(args.train_input)
-    _, protein_id, train_features, train_label, scaler = data_processing(train_df)
+    _, protein_id, train_features, train_label = data_processing(train_df)
 
     print(f'[INFO] Loading test data from     : {args.test_input}')
     test_df = pd.read_csv(args.test_input)
-    _, _, test_features, test_label, _ = data_processing(test_df, scaler=scaler)
+    _, _, test_features, test_label = data_processing(test_df)   # independent normalize
 
     print(f'[INFO] Training set shape         : {train_features.shape}')
     print(f'[INFO] Test set shape             : {test_features.shape}')
 
-    # ── Protein selection: name-based auto-lookup OR manual index override ──
     if args.protein_indices:
         protein_indices = args.protein_indices
         print(f'[INFO] Selected proteins ({len(protein_indices)}) [manual index]: '
@@ -547,10 +537,10 @@ Default 7-protein panel (auto name-match):
   {DEFAULT_PANEL}
 
 Examples:
-  # Internal validation — use default 7-protein panel
+  # Internal validation — default 7-protein panel
   python prerisk_cov2.py --mode internal --input Discovery.csv --n-iterations 100 --use-smote --plot-curves
 
-  # Internal validation — override with custom proteins
+  # Internal validation — custom protein names
   python prerisk_cov2.py --mode internal --input Discovery.csv --protein-names MCP-3 LIF-R TRANCE
 
   # External validation
@@ -566,13 +556,11 @@ Examples:
     parser.add_argument('--train-input', type=str, help='Training CSV (external mode)')
     parser.add_argument('--test-input',  type=str, help='Test CSV (external mode)')
 
-    # ── Feature selection: name-based (default) OR index override ──────────
     feat_grp = parser.add_mutually_exclusive_group()
     feat_grp.add_argument(
         '--protein-names', type=str, nargs='+', default=None,
         metavar='PROTEIN',
-        help=(f'Protein names to use (space-separated, case-insensitive). '
-              f'Default: {DEFAULT_PANEL}')
+        help=f'Protein names to use (space-separated, case-insensitive). Default: {DEFAULT_PANEL}'
     )
     feat_grp.add_argument(
         '--protein-indices', type=int, nargs='+', default=None,
