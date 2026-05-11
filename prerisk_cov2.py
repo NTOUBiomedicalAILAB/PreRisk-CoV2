@@ -8,7 +8,6 @@ and Machine Learning Model for Predicting SARS-CoV-2 Infection Risk
 
 Author: NTOU Biomedical AI LAB
 GitHub: https://github.com/NTOUBiomedicalAILAB/PreRisk-CoV2
-
 """
 
 import numpy as np
@@ -30,6 +29,55 @@ from sklearn.neighbors import KNeighborsClassifier
 from imblearn.over_sampling import SMOTE
 import openpyxl
 warnings.filterwarnings('ignore')
+
+
+###############################################################################
+# DEFAULT 7-PROTEIN PANEL
+###############################################################################
+
+DEFAULT_PANEL = ['MCP-3', 'LIF-R', 'TRANCE', 'FGF-23', 'NT-3', 'CXCL1', 'CXCL6']
+
+
+def resolve_protein_indices(protein_id, panel=None):
+    """
+    Resolve protein names to 0-based indices in the protein_id list.
+    Matching is case-insensitive and strips surrounding whitespace.
+
+    Parameters
+    ----------
+    protein_id : list[str]   – full list of protein column names from the CSV
+    panel      : list[str]   – target protein names; defaults to DEFAULT_PANEL
+
+    Returns
+    -------
+    indices : list[int]      – resolved 0-based indices (same order as panel)
+
+    Raises
+    ------
+    ValueError  if any panel protein is not found in protein_id
+    """
+    if panel is None:
+        panel = DEFAULT_PANEL
+
+    lookup = {name.strip().upper(): idx for idx, name in enumerate(protein_id)}
+    indices = []
+    missing = []
+
+    for name in panel:
+        key = name.strip().upper()
+        if key in lookup:
+            indices.append(lookup[key])
+        else:
+            missing.append(name)
+
+    if missing:
+        raise ValueError(
+            f"[ERROR] The following proteins were NOT found in the CSV:\n"
+            f"  {missing}\n"
+            f"  Available proteins: {protein_id}"
+        )
+
+    return indices
 
 
 ###############################################################################
@@ -176,8 +224,8 @@ def save_internal_results(data_save, loop, output_path, sheet_name):
         sum(data_save[:, 4]) / loop,
         sum(data_save[:, 5]) / loop,
         sum(data_save[:, 6]) / loop,
-        sum(data_save[:, 7]) / loop,   # MCC
-        sum(data_save[:, 8]) / loop,   # F1
+        sum(data_save[:, 7]) / loop,
+        sum(data_save[:, 8]) / loop,
     ])
     ws.append([
         'Std Dev',
@@ -273,8 +321,16 @@ def internal_validation(args):
     print(f'[INFO] Dataset shape        : {features.shape}')
     print(f'[INFO] Class distribution   : {np.bincount(label.astype(int))}')
 
-    protein_indices = args.protein_indices if args.protein_indices else [3, 50, 40, 36, 83]
-    print(f'[INFO] Selected proteins ({len(protein_indices)}): {[protein_id[i] for i in protein_indices]}')
+    # ── Protein selection: name-based auto-lookup OR manual index override ──
+    if args.protein_indices:
+        protein_indices = args.protein_indices
+        print(f'[INFO] Selected proteins ({len(protein_indices)}) [manual index]: '
+              f'{[protein_id[i] for i in protein_indices]}')
+    else:
+        panel = args.protein_names if args.protein_names else DEFAULT_PANEL
+        protein_indices = resolve_protein_indices(protein_id, panel)
+        print(f'[INFO] Selected proteins ({len(protein_indices)}) [auto name-match]: '
+              f'{[protein_id[i] for i in protein_indices]}')
 
     features_sel = features[:, protein_indices]
     loop         = args.n_iterations
@@ -386,7 +442,17 @@ def external_validation(args):
     print(f'[INFO] Training set shape         : {train_features.shape}')
     print(f'[INFO] Test set shape             : {test_features.shape}')
 
-    protein_indices = args.protein_indices if args.protein_indices else [3, 50, 40, 36, 83]
+    # ── Protein selection: name-based auto-lookup OR manual index override ──
+    if args.protein_indices:
+        protein_indices = args.protein_indices
+        print(f'[INFO] Selected proteins ({len(protein_indices)}) [manual index]: '
+              f'{[protein_id[i] for i in protein_indices]}')
+    else:
+        panel = args.protein_names if args.protein_names else DEFAULT_PANEL
+        protein_indices = resolve_protein_indices(protein_id, panel)
+        print(f'[INFO] Selected proteins ({len(protein_indices)}) [auto name-match]: '
+              f'{[protein_id[i] for i in protein_indices]}')
+
     train_sel = train_features[:, protein_indices]
     test_sel  = test_features[:,  protein_indices]
 
@@ -476,6 +542,20 @@ def main():
     parser = argparse.ArgumentParser(
         description='PreRisk-CoV2: SARS-CoV-2 Pre-exposure Risk Assessment Framework',
         formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=f"""
+Default 7-protein panel (auto name-match):
+  {DEFAULT_PANEL}
+
+Examples:
+  # Internal validation — use default 7-protein panel
+  python prerisk_cov2.py --mode internal --input Discovery.csv --n-iterations 100 --use-smote --plot-curves
+
+  # Internal validation — override with custom proteins
+  python prerisk_cov2.py --mode internal --input Discovery.csv --protein-names MCP-3 LIF-R TRANCE
+
+  # External validation
+  python prerisk_cov2.py --mode external --train-input Discovery.csv --test-input Validation.csv --n-iterations 100 --use-smote --plot-curves
+        """
     )
 
     parser.add_argument('--mode', type=str, required=True,
@@ -486,8 +566,19 @@ def main():
     parser.add_argument('--train-input', type=str, help='Training CSV (external mode)')
     parser.add_argument('--test-input',  type=str, help='Test CSV (external mode)')
 
-    parser.add_argument('--protein-indices', type=int, nargs='+', default=None,
-                        help='0-based protein feature indices. Default: [3,50,40,36,83]')
+    # ── Feature selection: name-based (default) OR index override ──────────
+    feat_grp = parser.add_mutually_exclusive_group()
+    feat_grp.add_argument(
+        '--protein-names', type=str, nargs='+', default=None,
+        metavar='PROTEIN',
+        help=(f'Protein names to use (space-separated, case-insensitive). '
+              f'Default: {DEFAULT_PANEL}')
+    )
+    feat_grp.add_argument(
+        '--protein-indices', type=int, nargs='+', default=None,
+        metavar='IDX',
+        help='0-based column indices (overrides name lookup). Legacy option.'
+    )
 
     parser.add_argument('--n-neighbors', type=int,  default=5)
     parser.add_argument('--leaf-size',   type=int,  default=30)
