@@ -2,9 +2,9 @@
 
 ## Overview
 
-PreRisk-CoV2 is a machine learning framework for pre-exposure risk assessment of SARS-CoV-2 susceptibility using Serum protein biomarkers. The main function is to predict infection risk **before exposure** based on a 7-protein panel identified through K-Nearest Neighbors (KNN) combined with Genetic Algorithm (GA) feature selection. The input consists of protein expression data (CSV format), and the output provides risk prediction results with comprehensive performance metrics.
+PreRisk-CoV2 is a machine learning framework for pre-exposure risk assessment of SARS-CoV-2 susceptibility using Serum protein biomarkers. The main function is to predict infection risk **before exposure** based on a 7-protein panel identified through K-Nearest Neighbors (KNN) combined with Genetic Algorithm (GA) feature selection. 
 
-📄 **Paper**: Pre-exposure Serum Proteins Predict 3-Month SARS-CoV-2 Susceptibility: A 7-Protein Candidate Signature
+
 
 If you have any trouble installing or using PreRisk-CoV2, you can post an issue or directly email us. We welcome any suggestions.
 
@@ -69,7 +69,7 @@ cd PreRisk-CoV2/
 ---
 
 ## 📊 Input Data Format
-The input consists of protein expression data (CSV format), and the output provides infection risk prediction.
+The input consists of protein expression data (CSV format),
 To ensure compatibility with the prediction pipeline, please format your input CSV as follows:
 
 ### CSV File Structure
@@ -80,7 +80,7 @@ To ensure compatibility with the prediction pipeline, please format your input C
 - **Column 2 ~ N**: Protein expression levels (e.g., Olink NPX values).
 
 ### 🧬 The 7-Protein Panel (Default)
-By default, the system automatically extracts and encrypts the following 7 biomarkers using  name matching:
+By default, the system automatically extracts the following 7 biomarkers using case-insensitive name matching:
 > **MCP-3, LIF-R, TRANCE, FGF-23, NT-3, CXCL1, CXCL6**
 
 <br>
